@@ -1,91 +1,112 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Copiador de Código</title>
+    <title>Visualizador e Copiador de Código</title>
     <meta charset="UTF-8">
     <style>
-        /* Estilos CSS para centralizar e focar apenas no botão */
         body {
-            /* Ocupa a tela inteira */
-            height: 100vh;
-            margin: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f4f4f9;
             display: flex;
-            justify-content: center; /* Centraliza horizontalmente */
-            align-items: center; /* Centraliza verticalmente */
-            background-color: #eef2f7; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
-        
-        /* Estilo do Botão de Cópia */
+        .container {
+            max-width: 600px;
+            width: 90%;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-top: 50px;
+        }
+        h1 {
+            color: #1a4d96;
+            font-size: 24px;
+        }
+        /* Caixa de visualização do código */
+        #codigo-box {
+            width: 95%;
+            height: 150px;
+            padding: 10px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+            font-family: monospace;
+            font-size: 13px;
+            background-color: #f8f8f8;
+            color: #333;
+            box-sizing: border-box;
+            line-height: 1.4;
+        }
         #btn-copiar {
             background-color: #1a4d96; /* Azul Escuro */
             color: white;
-            padding: 20px 40px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 10px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
-            letter-spacing: 1px;
-            transition: background-color 0.3s ease, transform 0.1s;
-            box-shadow: 0 6px 0 #0f386d; /* Sombra para 3D */
-            user-select: none; 
+            transition: background-color 0.3s;
         }
         #btn-copiar:hover {
             background-color: #0f386d;
         }
-        #btn-copiar:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px 0 #0f386d;
-        }
-
-        /* NOVO: A área de texto agora está completamente escondida */
-        #codigo-script-box {
-            position: absolute;
-            left: -9999px;
-            top: -9999px;
-            opacity: 0;
-            width: 1px;
-            height: 1px;
+        /* IMPORTANTE: O script que será copiado fica aqui, invisível, para cópia exata */
+        #script-original {
+            display: none;
         }
     </style>
 </head>
 <body>
 
-    <textarea id="codigo-script-box" readonly>
-        javascript:(()=>{let t=localStorage.getItem('FF_TOKEN');if(!t)return alert('Token não encontrado');document.body.insertAdjacentHTML('beforeend',`<div id=ff-b style='position:fixed;top:10px;right:10px;z-index:9999;padding:10px;background:#1a4d96;color:#fff;font:14px sans-serif;border-radius:6px;box-shadow:0 4px 8px rgba(0,0,0,.3)'><div style='font-weight:bold;margin-bottom:5px;'>Esse é seu token, clique em Copiar:</div><textarea id=ff-v readonly style='width:250px;height:70px;background:#0f386d;color:#fff;border:1px solid #0f386d;padding:5px;border-radius:4px;box-sizing:border-box;font:13px monospace;'>${t}</textarea><div style='margin-top:8px;text-align:right;'><button onclick='let v=document.getElementById("ff-v").value,b=this;navigator.clipboard.writeText(v).then(()=>{b.textContent="COPIADO!";b.style.background="#4CAF50";setTimeout(()=>b.textContent="Copiar",1500)}).catch(()=>{document.getElementById("ff-v").select();document.execCommand("copy");b.textContent="COPIADO!";b.style.background="#4CAF50";setTimeout(()=>b.textContent="Copiar",1500)})' style='padding:6px 12px;border:none;border-radius:4px;cursor:pointer;background:#f5f5f5;'>Copiar</button><button onclick='document.getElementById("ff-b").remove()' style='padding:6px 12px;border:none;border-radius:4px;cursor:pointer;background:#f5f5f5;margin-left:5px;'>Fechar</button></div><div style='margin-top:10px;text-align:center;font-size:12px;'><a href='https://discord.gg/gHGjtbNHCx' target='_blank' style='color:#fff;text-decoration:underline;'>Help</a></div></div>`)})()
-    </textarea>
+    <div class="container">
+        <h1>Código do Bookmarklet</h1>
+        <p>Copie o código abaixo e cole-o no campo **URL** de um novo Favorito.</p>
+        
+        <textarea id="codigo-box" readonly></textarea>
+        
+        <button id="btn-copiar" onclick="copiarCodigo()">Copiar Código Abaixo</button>
 
-    <button id="btn-copiar" onclick="copiarCodigo()">
-        COPIAR CÓDIGO
-    </button>
+        <div id="script-original">
+            javascript:(()=>{let t=localStorage.getItem('FF_TOKEN');if(!t)return alert('Token não encontrado');document.body.insertAdjacentHTML('beforeend',`<div id=ff-b style='position:fixed;top:10px;right:10px;z-index:9999;padding:10px;background:#1a4d96;color:#fff;font:14px sans-serif;border-radius:6px;box-shadow:0 4px 8px rgba(0,0,0,.3)'><div style='font-weight:bold;margin-bottom:5px;'>Esse é seu token, clique em Copiar:</div><textarea id=ff-v readonly style='width:250px;height:70px;background:#0f386d;color:#fff;border:1px solid #0f386d;padding:5px;border-radius:4px;box-sizing:border-box;font:13px monospace;'>${t}</textarea><div style='margin-top:8px;text-align:right;'><button onclick='let v=document.getElementById("ff-v").value,b=this;navigator.clipboard.writeText(v).then(()=>{b.textContent="COPIADO!";b.style.background="#4CAF50";setTimeout(()=>b.textContent="Copiar",1500)}).catch(()=>{document.getElementById("ff-v").select();document.execCommand("copy");b.textContent="COPIADO!";b.style.background="#4CAF50";setTimeout(()=>b.textContent="Copiar",1500)})' style='padding:6px 12px;border:none;border-radius:4px;cursor:pointer;background:#f5f5f5;'>Copiar</button><button onclick='document.getElementById("ff-b").remove()' style='padding:6px 12px;border:none;border-radius:4px;cursor:pointer;background:#f5f5f5;margin-left:5px;'>Fechar</button></div><div style='margin-top:10px;text-align:center;font-size:12px;'><a href='https://discord.gg/gHGjtbNHCx' target='_blank' style='color:#fff;text-decoration:underline;'>Help</a></div></div>`)})()
+        </div>
+    </div>
 
     <script>
+        // Variável que armazena o script original (sem espaços e quebras)
+        const scriptOriginal = document.getElementById('script-original').textContent.trim();
+
+        // 1. Função para carregar o script na caixa de visualização quando a página abrir
+        window.onload = function() {
+            document.getElementById('codigo-box').value = scriptOriginal;
+        };
+
+        // 2. Função para copiar o código
         function copiarCodigo() {
-            // 1. Pega o valor (VALUE) da área de texto, garantindo a cópia completa
-            const codigoBox = document.getElementById('codigo-script-box');
-            const codigo = codigoBox.value.trim();
             
             const btn = document.getElementById('btn-copiar');
 
-            // 2. Tenta copiar para a área de transferência
-            navigator.clipboard.writeText(codigo)
+            // Tenta copiar o script da variável original (corrigida)
+            navigator.clipboard.writeText(scriptOriginal)
                 .then(() => {
-                    // 3. Feedback visual de sucesso
+                    // Feedback visual de sucesso
                     btn.textContent = 'COPIADO! ✅';
                     btn.style.backgroundColor = '#4CAF50';
-                    btn.style.boxShadow = '0 6px 0 #388e3c';
-
-                    // 4. Volta ao estado original após 2 segundos
+                    
+                    // Volta ao estado original
                     setTimeout(() => {
-                        btn.textContent = 'COPIAR CÓDIGO';
+                        btn.textContent = 'Copiar Código Abaixo';
                         btn.style.backgroundColor = '#1a4d96';
-                        btn.style.boxShadow = '0 6px 0 #0f386d';
                     }, 2000);
                 })
                 .catch(err => {
-                    // Feedback de erro (se a API falhar)
-                    alert("Erro ao copiar. Seu navegador pode ter bloqueado a cópia automática.");
+                    alert("Erro ao copiar. Tente selecionar o texto na caixa e copiar manualmente.");
                 });
         }
     </script>
