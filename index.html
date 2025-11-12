@@ -3,7 +3,6 @@
 <head>
     <title>Copiador de Código</title>
     <meta charset="UTF-8">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     
     <style>
@@ -11,23 +10,38 @@
             height: 100vh;
             margin: 0;
             display: flex;
+            flex-direction: column; /* Coloca os elementos um em cima do outro */
             justify-content: center;
             align-items: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
 
-            /* PROPRIEDADES PARA A SUA IMAGEM DE FUNDO */
-            /* O nome do arquivo foi inserido aqui: */
-            background-image: url('2695730ad73957f7c22d4074b5ccb933.png'); 
+            /* Fundo (Cor de backup) */
+            background-color: #eef2f7; 
+        }
+
+        /* -------------------------------------- */
+        /* NOVO: ESTILO PARA O QUADRADO DA IMAGEM */
+        /* -------------------------------------- */
+        #image-box {
+            width: 150px; 
+            height: 150px;
+            border-radius: 12px; /* Cantos arredondados */
+            overflow: hidden; /* Garante que a imagem fique dentro das bordas */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para destaque */
+            margin-bottom: 30px; /* Espaço entre o quadrado e o botão */
+            background-color: #fff; /* Fundo branco caso a imagem demore a carregar */
+
+            /* PROPRIEDADES DA IMAGEM */
+            background-image: url('2695730ad73957f7c22d4074b5ccb933.png'); /* SEU ARQUIVO AQUI */
             background-size: cover; 
             background-position: center; 
             background-repeat: no-repeat;
-            background-color: #000; /* Fundo preto para celulares mais antigos */
         }
-        
+
+        /* Estilo do Botão de Cópia */
         #btn-copiar {
-            /* Adicionei transparência para que o fundo da imagem apareça levemente */
-            background-color: rgba(26, 77, 150, 0.85); 
+            background-color: #1a4d96; 
             color: white;
             padding: 20px 40px;
             border: none;
@@ -37,23 +51,23 @@
             font-weight: bold;
             letter-spacing: 1px;
             transition: background-color 0.3s ease, transform 0.1s;
-            box-shadow: 0 6px 0 rgba(15, 56, 109, 0.85); 
+            box-shadow: 0 6px 0 #0f386d; 
             user-select: none; 
             width: 90%; 
             max-width: 350px;
-            /* Efeito de desfoque moderno para destacar o botão sobre a imagem */
-            backdrop-filter: blur(5px); 
         }
         #btn-copiar:hover {
-            background-color: rgba(15, 56, 109, 0.95);
+            background-color: #0f386d;
         }
         #btn-copiar:active {
             transform: translateY(4px);
-            box-shadow: 0 2px 0 rgba(15, 56, 109, 0.95);
+            box-shadow: 0 2px 0 #0f386d;
         }
     </style>
 </head>
 <body>
+
+    <div id="image-box"></div>
 
     <button id="btn-copiar" onclick="copiarCodigo()">
         COPIAR CÓDIGO
@@ -65,7 +79,6 @@
 
         function copiarCodigo() {
             const btn = document.getElementById('btn-copiar');
-            // Tenta copiar o script da variável original
             navigator.clipboard.writeText(SCRIPT_COMPLETO)
                 .then(() => {
                     // Feedback visual de sucesso
@@ -74,9 +87,8 @@
                     btn.style.boxShadow = '0 6px 0 #388e3c';
                     setTimeout(() => {
                         btn.textContent = 'COPIAR CÓDIGO';
-                        // Retorna à cor original transparente
-                        btn.style.backgroundColor = 'rgba(26, 77, 150, 0.85)';
-                        btn.style.boxShadow = '0 6px 0 rgba(15, 56, 109, 0.85)';
+                        btn.style.backgroundColor = '#1a4d96';
+                        btn.style.boxShadow = '0 6px 0 #0f386d';
                     }, 2000);
                 })
                 .catch(err => {
