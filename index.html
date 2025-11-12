@@ -10,27 +10,27 @@
             height: 100vh;
             margin: 0;
             display: flex;
-            flex-direction: column; /* Coloca os elementos um em cima do outro */
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
 
-            /* Fundo (Cor de backup) */
-            background-color: #eef2f7; 
+            /* MUDANÇA: Fundo completamente preto */
+            background-color: #000000; 
         }
 
         /* -------------------------------------- */
-        /* NOVO: ESTILO PARA O QUADRADO DA IMAGEM */
+        /* ESTILO PARA O QUADRADO DA IMAGEM */
         /* -------------------------------------- */
         #image-box {
             width: 150px; 
             height: 150px;
-            border-radius: 12px; /* Cantos arredondados */
-            overflow: hidden; /* Garante que a imagem fique dentro das bordas */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para destaque */
-            margin-bottom: 30px; /* Espaço entre o quadrado e o botão */
-            background-color: #fff; /* Fundo branco caso a imagem demore a carregar */
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2); /* Sombra clara no fundo escuro */
+            margin-bottom: 30px;
+            background-color: #333333; /* Fundo cinza escuro para a caixa */
 
             /* PROPRIEDADES DA IMAGEM */
             background-image: url('2695730ad73957f7c22d4074b5ccb933.png'); /* SEU ARQUIVO AQUI */
@@ -41,7 +41,7 @@
 
         /* Estilo do Botão de Cópia */
         #btn-copiar {
-            background-color: #1a4d96; 
+            background-color: #1a4d96; /* Azul Escuro (destaca-se bem no preto) */
             color: white;
             padding: 20px 40px;
             border: none;
@@ -81,7 +81,6 @@
             const btn = document.getElementById('btn-copiar');
             navigator.clipboard.writeText(SCRIPT_COMPLETO)
                 .then(() => {
-                    // Feedback visual de sucesso
                     btn.textContent = 'COPIADO! ✅';
                     btn.style.backgroundColor = '#4CAF50';
                     btn.style.boxShadow = '0 6px 0 #388e3c';
